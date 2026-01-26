@@ -1,30 +1,21 @@
 import pygame
 
 class Key:
-    def __init__(self, pos, size, color):
+    def __init__(self, pos, image):
         self.pos = pygame.Vector2(pos)
-        self.size = size
-        self.color = color
+        self.image = image
+        self.rect = self.image.get_rect(center=(int(self.pos.x), int(self.pos.y)))
         self.collected = False
-
-    def triangle_points(self):
-        x, y = self.pos.x, self.pos.y
-        s = self.size
-        return [
-            (x, y - s),     # top point
-            (x - s, y + s), # bottom left
-            (x + s, y + s), # bottom right
-        ]
 
     def draw(self, screen):
         if not self.collected:
-            pygame.draw.polygon(screen, self.color, self.triangle_points())
+            screen.blit(self.image, self.rect.topleft)
 
     def touches_circle(self, circle_pos, radius):
-        """
-        Simple collision: treat the key like a point in the middle.
-        If the player circle touches that point, you got the key!
-        """
-        dx = circle_pos.x - self.pos.x
-        dy = circle_pos.y - self.pos.y
+        # Treat key as a point at its center
+        dx = circle_pos.x - self.rect.centerx
+        dy = circle_pos.y - self.rect.centery
         return (dx * dx + dy * dy) < (radius * radius)
+
+    def collect(self):
+        self.collected = True

@@ -1,18 +1,14 @@
 import pygame
 
 class Obstacle:
-    def __init__(self, rect, color):
+    def __init__(self, rect, image):
         self.rect = rect
-        self.color = color
+        self.image = image
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        screen.blit(self.image, self.rect.topleft)
 
     def blocks_circle(self, circle_pos, radius):
-        """
-        Returns True if a circle is touching this obstacle.
-        The obstacle does the math, so main.py stays simple.
-        """
         closest_x = max(self.rect.left, min(circle_pos.x, self.rect.right))
         closest_y = max(self.rect.top, min(circle_pos.y, self.rect.bottom))
 
