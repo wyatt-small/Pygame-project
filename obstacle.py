@@ -2,13 +2,18 @@ import pygame
 
 class Obstacle:
     def __init__(self, rect, image):
+        # rect is in WORLD coordinates
         self.rect = rect
         self.image = image
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect.topleft)
+    def draw(self, screen, camera):
+        # Convert world position -> screen position by subtracting camera
+        screen_x = self.rect.x - camera.x
+        screen_y = self.rect.y - camera.y
+        screen.blit(self.image, (screen_x, screen_y))
 
     def blocks_circle(self, circle_pos, radius):
+        # circle_pos is in WORLD coordinates
         closest_x = max(self.rect.left, min(circle_pos.x, self.rect.right))
         closest_y = max(self.rect.top, min(circle_pos.y, self.rect.bottom))
 
